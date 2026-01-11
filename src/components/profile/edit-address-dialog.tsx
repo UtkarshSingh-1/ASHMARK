@@ -1,4 +1,4 @@
- "use client"
+"use client"
 
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
@@ -14,6 +14,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog"
 import { toast } from "@/components/ui/use-toast"
+import { INDIAN_STATES } from "@/lib/indianStates"
 
 interface Address {
   id: string
@@ -43,19 +44,19 @@ export function EditAddressDialog({ open, onOpenChange, address, onSave }: EditA
     city: address?.city || "",
     state: address?.state || "",
     pincode: address?.pincode || "",
-    country: address?.country || "India",
+    country: "India", // Always India
     type: address?.type || "home" as 'home' | 'work' | 'other',
     isDefault: address?.isDefault || false,
   })
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    
+
     try {
       const url = address 
         ? `/api/addresses/${address.id}`
         : '/api/addresses'
-      
+
       const method = address ? 'PUT' : 'POST'
 
       const response = await fetch(url, {
@@ -119,10 +120,13 @@ export function EditAddressDialog({ open, onOpenChange, address, onSave }: EditA
                 />
               </div>
             </div>
-            
+
             <div className="space-y-2">
               <Label htmlFor="type">Address Type</Label>
-              <Select value={formData.type} onValueChange={(value: 'home' | 'work' | 'other') => setFormData({ ...formData, type: value })}>
+              <Select
+                value={formData.type}
+                onValueChange={(value: 'home' | 'work' | 'other') => setFormData({ ...formData, type: value })}
+              >
                 <SelectTrigger className="border-0">
                   <SelectValue />
                 </SelectTrigger>
@@ -133,7 +137,7 @@ export function EditAddressDialog({ open, onOpenChange, address, onSave }: EditA
                 </SelectContent>
               </Select>
             </div>
-            
+
             <div className="space-y-2">
               <Label htmlFor="street">Street Address</Label>
               <Input
@@ -144,6 +148,7 @@ export function EditAddressDialog({ open, onOpenChange, address, onSave }: EditA
                 className="border-0"
               />
             </div>
+
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="city">City</Label>
@@ -155,26 +160,27 @@ export function EditAddressDialog({ open, onOpenChange, address, onSave }: EditA
                   className="border-0"
                 />
               </div>
-             <div className="space-y-2">
-  <Label htmlFor="state">State</Label>
-  <Select
-    value={formData.state}
-    onValueChange={(value) => setFormData({ ...formData, state: value })}
-  >
-    <SelectTrigger className="border-0">
-      <SelectValue placeholder="Select State" />
-    </SelectTrigger>
-    <SelectContent className="border-0">
-      {INDIAN_STATES.map((state) => (
-        <SelectItem key={state} value={state}>
-          {state}
-        </SelectItem>
-      ))}
-    </SelectContent>
-  </Select>
-</div>
 
+              <div className="space-y-2">
+                <Label htmlFor="state">State</Label>
+                <Select
+                  value={formData.state}
+                  onValueChange={(value) => setFormData({ ...formData, state: value })}
+                >
+                  <SelectTrigger className="border-0">
+                    <SelectValue placeholder="Select State" />
+                  </SelectTrigger>
+                  <SelectContent className="border-0">
+                    {INDIAN_STATES.map((state) => (
+                      <SelectItem key={state} value={state}>
+                        {state}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
+
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="pincode">PIN Code</Label>
@@ -190,14 +196,14 @@ export function EditAddressDialog({ open, onOpenChange, address, onSave }: EditA
                 <Label htmlFor="country">Country</Label>
                 <Input
                   id="country"
-                  value={formData.country}
-                  onChange={(e) => setFormData({ ...formData, country: e.target.value })}
-                  required
-                  className="border-0"
+                  value="India"
+                  disabled
+                  className="border-0 bg-muted/50 text-muted-foreground"
                 />
               </div>
             </div>
           </div>
+
           <DialogFooter>
             <Button
               type="button"
