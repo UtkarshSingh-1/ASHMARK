@@ -287,6 +287,21 @@ enum AddressType {
   other
 }
 
+enum ReturnStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  COMPLETED
+}
+
+enum ExchangeStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  COMPLETED
+}
+
+
 model PromoCodeUsage {
   id        String   @id @default(cuid())
   code      String
